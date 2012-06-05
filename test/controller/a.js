@@ -1,0 +1,1 @@
+QuickWeb.get('/user/:user', function (e) {  alert(e.param.user);});

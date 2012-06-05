@@ -1,0 +1,21 @@
+{% for item in comments %}
+<div class="status-comment-item">
+  <div class="user-image" title="{{ item.user.screen_name }}">
+    <a href="#/user/{{ item.user.id }}" wb_screen_name="{{ item.user.screen_name }}">
+      <img src="{{ item.user.profile_image_url }}">
+    </a>
+  </div>
+  <div class="comment-content">
+    <a href="#/user/{{ item.user.id }}" class="username" wb_screen_name="{{ item.user.screen_name }}">{{ item.user.screen_name }}</a>
+    : {{ item.text }}
+    ({{ item.created_at_text }})
+  </div>
+  <div class="clear"></div>
+</div>
+{% endfor %}
+{% assign comments_size = comments | size %}
+{% if total_number > 50 and comments_size >= 50 %}
+<div class="comment-bottom">
+  <a href="#/comments/{{ id }}?previous_cursor={{ comments | last | get:'id' }}">显示更多...</a>
+</div>
+{% endif %}

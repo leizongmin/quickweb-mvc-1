@@ -1,0 +1,1 @@
+QuickWeb.get('/book/:name', function (e) {  alert(e.param.name);});

@@ -1,0 +1,56 @@
+{% for item in statuses %}
+<div class="timeline-item" id="item-{{ item.id }}">
+  <div class="user-image" title="{{ item.user.screen_name }}">
+    <a href="#/user/{{ item.user.id }}" wb_screen_name="{{ item.user.screen_name }}">
+      <img src="{{ item.user.profile_image_url }}">
+    </a>
+  </div>
+  <div class="status-content">
+    <a href="#/user/{{ item.user.id }}" class="username" wb_screen_name="{{ item.user.screen_name }}">{{ item.user.screen_name }}</a>
+    : {{ item.text }}
+    {% if item.thumbnail_pic %}
+      <div class="status-image">
+        <img class="imgbigcursor" src="{{ item.thumbnail_pic }}" onclick="switchPic(this)" src="{{ item.thumbnail_pic }}" data-small="{{ item.thumbnail_pic }}" data-big="{{ item.bmiddle_pic }}" data-origin="{{ item.original_pic }}">
+      </div>
+    {% endif %}
+    {% if item.retweeted_status %}
+    <div class="status-retweeted">
+      <a href="#/user/{{ item.retweeted_status.user.id }}" class="username" wb_screen_name="{{ item.retweeted_status.user.screen_name }}">@{{ item.retweeted_status.user.screen_name }}</a>
+      : {{ item.retweeted_status.text }}
+      {% if item.retweeted_status.thumbnail_pic %}
+        <div class="status-image">
+          <img class="imgbigcursor" src="{{ item.retweeted_status.thumbnail_pic }}" onclick="switchPic(this)" src="{{ item.retweeted_status.thumbnail_pic }}" data-small="{{ item.retweeted_status.thumbnail_pic }}" data-big="{{ item.retweeted_status.bmiddle_pic }}" data-origin="{{ item.retweeted_status.original_pic }}">
+        </div>
+      {% endif %}
+      <div class="status-info">
+        <span class="status-op">
+          <a href="#/reposts/{{ item.retweeted_status.id }}">转发({{ item.retweeted_status.reposts_count }})</a>
+          <i>|</i>
+          <a href="#/comments/{{ item.retweeted_status.id }}">评论({{ item.retweeted_status.comments_count }})</a>
+        </span>
+        <a href="#" title="{{ item.retweeted_status.created_at }}">{{ item.retweeted_status.created_at_text }}</a>&nbsp;&nbsp;&nbsp;
+        来自{{ item.retweeted_status.source }}
+      </div>
+    </div>
+    {% endif %}
+    <div class="status-info">
+      <span class="status-op">
+        <a href="#/reposts/{{ item.id }}">转发({{ item.reposts_count }})</a>
+        <i>|</i>
+        <a href="#/comments/{{ item.id }}">评论({{ item.comments_count }})</a>
+      </span>
+      <a href="#" title="{{ item.created_at }}">{{ item.created_at_text }}</a>&nbsp;&nbsp;&nbsp;
+      来自{{ item.source }}
+    </div>
+  </div>
+  <div class="clear"></div>
+</div>
+{% endfor %}
+
+<div class="timeline-bottom">
+  {% if uid %}
+    <a href="#/user/{{ uid }}?previous_cursor={{ statuses | last | get:'id' }}">显示更多...</a>
+  {% else %}
+    <a href="#/?previous_cursor={{ statuses | last | get:'id' }}">显示更多...</a>
+  {% endif %}
+</div>
