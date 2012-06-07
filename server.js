@@ -20,7 +20,7 @@ if (process.argv[2])
   process.chdir(process.argv[2]);
 
 var app = quickweb();
-app.use(middleware('.', '/app'));
+app.use(middleware({path: '.', prefix: '/app'}));
 app.onNotFound = function (req, res) {
   var filename = req.filename === '/' ? 'index.html' : req.filename.substr(1);
   res.sendStaticFile(filename);
@@ -31,4 +31,4 @@ var port = parseInt(process.argv[2]);
 if (isNaN(port))
   port = 8080;
 server.listen(port);
-console.log('Server listen on http://127.0.0.1:' + port);
+console.log('Server listen on http://127.0.0.1:' + port + '/app/');

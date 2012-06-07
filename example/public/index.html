@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>前端MVC演示</title>
+<link rel="stylesheet" href="index.css">
+</head>
+<body>
+
+  <header class="header-bar">
+    <nav>
+      <a href="#/">首页</a>
+      <i>|</i>
+      <a href="#/help">关于</a>
+    </nav>
+  </header>
+  
+  <div id="wrap">
+    <div id="left"></div>
+    <div id="main"></div>
+    <div id="left"></div>
+  </div>
+  
+  <div id="pop-window" class="pop-window">
+    <div class="window-header">
+      <a class="close" onclick="hidePopWindow()">×</a>
+    </div>
+    <div id="pop-window-body" class="window-body"></div>
+  </div>
+  
+</body>
+</html>
+<script src="http://code.jquery.com/jquery-1.7.2.min.js"></script>
+<script src="moment.min.js"></script>
+<script src=" http://tjs.sjs.sinajs.cn/open/api/js/wb.js?appkey=1728678474"></script>
+
+<!-- MVC基础库 -->
+<script src="tinyliquid.js"></script>
+<script src="quickwebmvc.js"></script>
+
+<!-- 用户应用 -->
+<script src="app.js"></script>
+
+
+<script>
+// 显示大图/小图
+var switchPic = function (obj) {
+  $obj = $(obj);
+  var small = $obj.attr('data-small');
+  var big = $obj.attr('data-big');
+  var origin = $obj.attr('data-origin');
+  // 查看大图
+  if ($obj.attr('src') == small) {
+    $obj.attr('src', 'loading.gif');
+    var img = new Image();
+    img.src = big;
+    img.onload = function () {
+      $obj.attr('src', big);
+      $obj.removeClass('imgbigcursor').addClass('imgsmallcursor');
+      $obj.before('<a class="viewbigpic-link" href="' + origin + '" target="_blank">[查看原图]</a><br>');
+    }
+  }
+  // 返回小图
+  else {
+    $obj.attr('src', small);
+    $obj.removeClass('imgsmallcursor').addClass('imgbigcursor');
+    $obj.prevAll('.viewbigpic-link, br').remove();
+  }
+}
+
+// 显示弹出窗口
+var showPopWindow = function (width, height) {
+  $win = $(window);
+  $obj = $('#pop-window');
+  if (isNaN(width))
+    width = $win.width() * 0.6;
+  if (isNaN(height))
+    height = $win.height() * 0.6;
+  $obj.width(width).height(height);
+  $obj.css('top', parseInt(($win.height() - height) / 2) - 50);
+  $obj.css('left', parseInt(($win.width() - width) / 2));
+  $('.window-body', $obj).height(height - 24);
+  $obj.show();
+};
+// 隐藏弹出窗口
+var hidePopWindow = function () {
+  $('#pop-window').fadeOut();
+  $('#pop-window-body').html('');
+};
+
+// 拖动滚动条，拖到底部自动载入下一页的微博
+(function () {
+  $window = $(window);
+  $document = $(document);
+  // 微博
+  $(document).scroll(function () {
+    if ($document.height() - $document.scrollTop() - $window.height() < 200) {
+      var url = $('#main .timeline-bottom a').attr('href');
+      if (url)
+        window.location = url;
+    }
+  });
+  // 评论
+  $popwindow = $('#pop-window-body');
+  $('#pop-window-body').scroll(function () {
+    var $body = $('#pop-window-body .status-comment');
+    if ($body.height() - $popwindow.scrollTop() - $popwindow.height() < 100) {
+      var url = $('#pop-window-body .comment-bottom a').attr('href');
+      if (url)
+        window.location = url;
+    }
+  });
+})();
+
+// 弹出登录框
+if (!WB2.checkLogin()) {
+  alert('请先登录微博！');
+  WB2.login();
+}
+</script>
