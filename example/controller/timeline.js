@@ -1,5 +1,5 @@
 // 显示默认微博
-QuickWeb.get('/', function (e) {
+QuickWeb.on('/', function (e) {
   loadingTimeline();
   var params = {};
   if (e.query.previous_cursor)
@@ -14,7 +14,7 @@ QuickWeb.get('/', function (e) {
 });
 
 // 获取指定好友的微博信息
-QuickWeb.get('/user/:uid', function (e) {
+QuickWeb.on('/user/:uid', function (e) {
   loadingTimeline();
   var uid = e.param.uid;
   var params = {uid: uid};
@@ -77,7 +77,7 @@ var showTimeline = function (e, sResult) {
 
 
 // 评论列表
-QuickWeb.get('/comments/:id', function (e) {
+QuickWeb.on('/comments/:id', function (e) {
   var id = e.param.id;
   var target = '#pop-window-body';
   loadingComment(target);
