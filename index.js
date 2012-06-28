@@ -1,3 +1,5 @@
+'use strict';
+
 /**
  * QuickWeb front-end MVC
  *
